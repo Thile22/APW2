@@ -1,0 +1,56 @@
+[
+  {
+    "id": 1,
+    "nombre": "Mouse Inalámbrico Logitech M170",
+    "desc": "Mouse inalámbrico con conexión USB, ergonómico y de bajo consumo.",
+    "precio": 8500.00,
+    "imagen": "img/mouse-logitech-m170.jpg",
+    "stock": 35,
+    "disponible": true
+  },
+  {
+    "id": 2,
+    "nombre": "Teclado Mecánico Redragon Kumara",
+    "desc": "Teclado mecánico retroiluminado con switches rojos, ideal para gaming.",
+    "precio": 24000.00,
+    "imagen": "img/teclado-redragon-kumara.jpg",
+    "stock": 12,
+    "disponible": true
+  },
+  {
+    "id": 3,
+    "nombre": "Monitor LED 24'' Samsung",
+    "desc": "Monitor Full HD de 24 pulgadas con panel IPS y bordes ultra delgados.",
+    "precio": 135000.00,
+    "imagen": "img/monitor-samsung-24.jpg",
+    "stock": 8,
+    "disponible": true
+  },
+  {
+    "id": 4,
+    "nombre": "Auriculares Bluetooth JBL Tune 510BT",
+    "desc": "Auriculares inalámbricos con hasta 40 horas de batería y sonido JBL Pure Bass.",
+    "precio": 45000.00,
+    "imagen": "img/auriculares-jbl-tune510bt.jpg",
+    "stock": 0,
+    "disponible": false
+  },
+  {
+    "id": 5,
+    "nombre": "Notebook Lenovo IdeaPad 3",
+    "desc": "Notebook con procesador Intel Core i5, 8GB RAM y 256GB SSD.",
+    "precio": 650000.00,
+    "imagen": "img/notebook-lenovo-ideapad3.jpg",
+    "stock": 5,
+    "disponible": true
+  },
+  {
+    "id": 6,
+    "nombre": "Webcam Logitech C920",
+    "desc": "Webcam Full HD 1080p con micrófono integrado, ideal para streaming y videollamadas.",
+    "precio": 60000.00,
+    "imagen": "img/webcam-logitech-c920.jpg",
+    "stock": 15,
+    "disponible": true
+  }
+]
