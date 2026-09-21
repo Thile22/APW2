@@ -1,15 +1,15 @@
-# Trabajo Práctico - Aplicaciones Web 2
+# Trabajo Practico - Aplicaciones Web 2
 
 ## Contexto del negocio
 
-Se realizo la estructura de datos de una tienda online dedicada a la comercialización de productos tecnológicos.
+Se realizo la estructura de datos de una tienda online dedicada a la comercializacion de productos tecnologicos.
 
 
 ## Estructuras
 
 ### usuarios.json
 
-Contiene la información de los usuarios registrados en la tienda.
+Contiene la informacion de los usuarios registrados en la tienda.
 
 Los principales datos son:
 
@@ -22,13 +22,13 @@ Los principales datos son:
 
 ### productos.json
 
-Contiene la información de los productos disponibles en la tienda.
+Contiene la informacion de los productos disponibles en la tienda.
 
 Los principales datos son:
 
 - ID del producto
 - Nombre
-- Descripción
+- Descripcion
 - Precio
 - Imagen
 - Stock
@@ -36,7 +36,7 @@ Los principales datos son:
 
 ### ventas.json
 
-Contiene la información de las ventas realizadas.
+Contiene la informacion de las ventas realizadas.
 
 Los principales datos son:
 
@@ -49,14 +49,14 @@ Los principales datos son:
 - Método de pago
 - Estado del pago
 
-## Relación entre las estructuras
+## Relacion entre las estructuras
 
 Las tres estructuras se encuentran relacionadas mediante identificadores.
 
 Cada venta posee un `id_usuario`, que permite identificar al usuario que
-realizó la compra.
+realizo la compra.
 
-Además, cada venta contiene un array `productos` con los IDs de los
+Ademas, cada venta contiene un array `productos` con los IDs de los
 productos adquiridos.
 
 La relación se puede representar de la siguiente manera:
@@ -75,8 +75,8 @@ productos.json
 
 Las estructuras utilizan diferentes tipos de datos:
 
-- **Numéricos:** IDs, precios, stock y totales.
+- **Numericos:** IDs, precios, stock y totales.
 - **Cadenas de texto:** nombres, apellidos, emails, descripciones,
-  direcciones y métodos de pago.
+  direcciones y metodos de pago.
 - **Booleanos:** estado de los usuarios, disponibilidad de productos
   y estado de pago de las ventas.
