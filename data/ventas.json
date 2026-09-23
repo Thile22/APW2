@@ -5,9 +5,12 @@
     "fecha": "2024-05-03",
     "direccion": "Av. Colón 1234, Córdoba",
     "metodo_pago": "tarjeta_credito",
-    "total": 32500.00,
+    "total": 32500,
     "pagado": true,
-    "productos": [1, 2]
+    "productos": [
+      1,
+      2
+    ]
   },
   {
     "id": 2,
@@ -15,9 +18,11 @@
     "fecha": "2024-05-10",
     "direccion": "San Martín 456, Córdoba",
     "metodo_pago": "transferencia",
-    "total": 135000.00,
+    "total": 135000,
     "pagado": true,
-    "productos": [3]
+    "productos": [
+      3
+    ]
   },
   {
     "id": 3,
@@ -25,9 +30,11 @@
     "fecha": "2024-05-15",
     "direccion": "Bv. Illia 789, Córdoba",
     "metodo_pago": "mercado_pago",
-    "total": 60000.00,
+    "total": 60000,
     "pagado": false,
-    "productos": [6]
+    "productos": [
+      6
+    ]
   },
   {
     "id": 4,
@@ -35,9 +42,11 @@
     "fecha": "2024-06-01",
     "direccion": "Av. Colón 1234, Córdoba",
     "metodo_pago": "tarjeta_debito",
-    "total": 650000.00,
+    "total": 650000,
     "pagado": true,
-    "productos": [5]
+    "productos": [
+      5
+    ]
   },
   {
     "id": 5,
@@ -45,8 +54,11 @@
     "fecha": "2024-06-08",
     "direccion": "Rivadavia 321, Córdoba",
     "metodo_pago": "efectivo",
-    "total": 68500.00,
+    "total": 68500,
     "pagado": true,
-    "productos": [1, 6]
+    "productos": [
+      1,
+      6
+    ]
   }
 ]

@@ -61,5 +61,14 @@
     "imagen": "img/mouse-logitech-m170.jpg",
     "stock": 35,
     "disponible": true
+  },
+  {
+    "id": 99,
+    "nombre": "Producto de prueba",
+    "desc": "Producto para probar la API",
+    "precio": 15000,
+    "imagen": "prueba.jpg",
+    "stock": 5,
+    "disponible": true
   }
 ]

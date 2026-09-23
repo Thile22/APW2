@@ -30,21 +30,5 @@
     "email": "sofia.martinez@email.com",
     "contraseña": "Sofia3456",
     "activo": true
-  },
-  {
-    "id": 2,
-    "nombre": "Maria",
-    "apellido": "Gomez",
-    "email": "maria.gomez@email.com",
-    "contraseña": "Maria1234",
-    "activo": true
-  },
-  {
-    "id": 2,
-    "nombre": "Maria",
-    "apellido": "Gomez",
-    "email": "maria.gomez@email.com",
-    "contraseña": "Maria1234",
-    "activo": true
   }
 ]
