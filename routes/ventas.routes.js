@@ -3,19 +3,18 @@ import { leerArchivo, guardarArchivo } from '../utils/fileDB.js';
 
 const router = express.Router();
 
-const rutaVentas = './data/ventas.json';
-
 // GET - Obtener todas las ventas
 router.get('/', (req, res) => {
-    const ventas = leerArchivo(rutaVentas);
+    const ventas = leerArchivo('ventas.json');
+
     res.json(ventas);
 });
 
 // GET - Obtener una venta por ID
 router.get('/buscar/:id', (req, res) => {
-    const ventas = leerArchivo(rutaVentas);
+    const ventas = leerArchivo('ventas.json');
 
-    const id = Number(req.params.id);
+    const id = parseInt(req.params.id);
 
     const venta = ventas.find(venta => venta.id === id);
 
@@ -30,21 +29,28 @@ router.get('/buscar/:id', (req, res) => {
 
 // POST - Crear una venta
 router.post('/', (req, res) => {
-    const { id_usuario, fecha, direccion, metodo_pago, pagado, productos } = req.body;
+    const {
+        id_usuario,
+        fecha,
+        direccion,
+        metodo_pago,
+        pagado,
+        productos
+    } = req.body;
 
-    // Verificar datos obligatorios
     if (!id_usuario || !fecha || !direccion || !metodo_pago || !productos) {
         return res.status(400).json({
             mensaje: 'Faltan datos obligatorios'
         });
     }
 
-    const usuarios = leerArchivo('./data/usuarios.json');
-    const productosDB = leerArchivo('./data/productos.json');
-    const ventas = leerArchivo(rutaVentas);
+    const usuarios = leerArchivo('usuarios.json');
+    const productosDB = leerArchivo('productos.json');
+    const ventas = leerArchivo('ventas.json');
 
-    // Verificar que el usuario exista
-    const usuarioExiste = usuarios.some(usuario => usuario.id === id_usuario);
+    const usuarioExiste = usuarios.some(
+        usuario => usuario.id === id_usuario
+    );
 
     if (!usuarioExiste) {
         return res.status(404).json({
@@ -52,14 +58,12 @@ router.post('/', (req, res) => {
         });
     }
 
-    // Verificar que se haya enviado al menos un producto
     if (!Array.isArray(productos) || productos.length === 0) {
         return res.status(400).json({
             mensaje: 'La venta debe tener al menos un producto'
         });
     }
 
-    // Verificar que todos los productos existan
     const productosValidos = productos.every(idProducto =>
         productosDB.some(producto => producto.id === idProducto)
     );
@@ -70,13 +74,14 @@ router.post('/', (req, res) => {
         });
     }
 
-    // Calcular el total
     const total = productos.reduce((suma, idProducto) => {
-        const producto = productosDB.find(producto => producto.id === idProducto);
+        const producto = productosDB.find(
+            producto => producto.id === idProducto
+        );
+
         return suma + producto.precio;
     }, 0);
 
-    // Generar nuevo ID
     const nuevoId = ventas.length > 0
         ? Math.max(...ventas.map(venta => venta.id)) + 1
         : 1;
@@ -94,16 +99,16 @@ router.post('/', (req, res) => {
 
     ventas.push(nuevaVenta);
 
-    guardarArchivo(rutaVentas, ventas);
+    guardarArchivo('ventas.json', ventas);
 
     res.status(201).json(nuevaVenta);
 });
 
 // PUT - Actualizar una venta
 router.put('/:id', (req, res) => {
-    const ventas = leerArchivo(rutaVentas);
+    const ventas = leerArchivo('ventas.json');
 
-    const id = Number(req.params.id);
+    const id = parseInt(req.params.id);
 
     const indice = ventas.findIndex(venta => venta.id === id);
 
@@ -119,16 +124,16 @@ router.put('/:id', (req, res) => {
         id: ventas[indice].id
     };
 
-    guardarArchivo(rutaVentas, ventas);
+    guardarArchivo('ventas.json', ventas);
 
     res.json(ventas[indice]);
 });
 
 // DELETE - Eliminar una venta
 router.delete('/:id', (req, res) => {
-    const ventas = leerArchivo(rutaVentas);
+    const ventas = leerArchivo('ventas.json');
 
-    const id = Number(req.params.id);
+    const id = parseInt(req.params.id);
 
     const indice = ventas.findIndex(venta => venta.id === id);
 
@@ -140,7 +145,7 @@ router.delete('/:id', (req, res) => {
 
     const ventaEliminada = ventas.splice(indice, 1)[0];
 
-    guardarArchivo(rutaVentas, ventas);
+    guardarArchivo('ventas.json', ventas);
 
     res.json({
         mensaje: 'Venta eliminada correctamente',

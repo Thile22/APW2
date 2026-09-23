@@ -3,17 +3,16 @@ import { leerArchivo, guardarArchivo } from '../utils/fileDB.js';
 
 const router = express.Router();
 
-const rutaProductos = './data/productos.json';
-
 // GET - Obtener todos los productos
 router.get('/', (req, res) => {
-    const productos = leerArchivo(rutaProductos);
+    const productos = leerArchivo('productos.json');
+
     res.json(productos);
 });
 
 // GET - Obtener un producto por ID
 router.get('/:id', (req, res) => {
-    const productos = leerArchivo(rutaProductos);
+    const productos = leerArchivo('productos.json');
 
     const id = parseInt(req.params.id);
 
@@ -30,20 +29,20 @@ router.get('/:id', (req, res) => {
 
 // POST - Crear un producto
 router.post('/', (req, res) => {
-    const productos = leerArchivo(rutaProductos);
+    const productos = leerArchivo('productos.json');
 
     const nuevoProducto = req.body;
 
     productos.push(nuevoProducto);
 
-    guardarArchivo(rutaProductos, productos);
+    guardarArchivo('productos.json', productos);
 
     res.status(201).json(nuevoProducto);
 });
 
 // PUT - Actualizar un producto
 router.put('/:id', (req, res) => {
-    const productos = leerArchivo(rutaProductos);
+    const productos = leerArchivo('productos.json');
 
     const id = parseInt(req.params.id);
 
@@ -60,15 +59,15 @@ router.put('/:id', (req, res) => {
         ...req.body
     };
 
-    guardarArchivo(rutaProductos, productos);
+    guardarArchivo('productos.json', productos);
 
     res.json(productos[indice]);
 });
 
 // DELETE - Eliminar un producto verificando que no tenga ventas asociadas
 router.delete('/:id', (req, res) => {
-    const productos = leerArchivo(rutaProductos);
-    const ventas = leerArchivo('./data/ventas.json');
+    const productos = leerArchivo('productos.json');
+    const ventas = leerArchivo('ventas.json');
 
     const id = parseInt(req.params.id);
 
@@ -92,13 +91,12 @@ router.delete('/:id', (req, res) => {
 
     const productoEliminado = productos.splice(indice, 1)[0];
 
-    guardarArchivo(rutaProductos, productos);
+    guardarArchivo('productos.json', productos);
 
     res.json({
         mensaje: 'Producto eliminado correctamente',
         producto: productoEliminado
     });
 });
-
 
 export default router;

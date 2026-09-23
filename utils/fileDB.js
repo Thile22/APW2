@@ -7,7 +7,12 @@ const __dirname = path.dirname(__filename);
 
 // Lee un archivo JSON de la carpeta /data
 export function leerArchivo(nombreArchivo) {
+    console.log('NOMBRE RECIBIDO:', nombreArchivo);
+    console.log('DIRECTORIO:', __dirname);
+
     const rutaArchivo = path.join(__dirname, '..', 'data', nombreArchivo);
+
+    console.log('RUTA FINAL:', rutaArchivo);
 
     const contenido = fs.readFileSync(rutaArchivo, 'utf-8');
 

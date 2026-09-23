@@ -82,55 +82,54 @@ Las estructuras utilizan diferentes tipos de datos:
   y estado de pago de las ventas.
 
 _________________________________________________________________________
-## Segunda entrega - API con Express.js
+# Segunda entrega - API con Express.js
+
+En esta segunda etapa se desarrollo un servidor utilizando Node.js y Express.js para gestionar las estructuras de datos creadas anteriormente.
+Se implementaron rutas utilizando los metodos HTTP GET, POST, PUT y DELETE, manteniendo los datos almacenados en archivos JSON.
 
 ## Servidor
-La direccion principal es: http://localhost:3000
+La dirección principal es:
+http://localhost:3000
 Las rutas de la API utilizan el prefijo /api.
 
-En esta segunda etapa se desarrolló un servidor utilizando Node.js y Express.js para gestionar las estructuras de datos creadas anteriormente.
-
-Se implementaron rutas utilizando los métodos HTTP GET, POST, PUT y DELETE, manteniendo los datos almacenados en archivos JSON.
-
 ## Tecnologias utilizadas
-Node.js
+
+ Node.js
 Express.js
-JavaScript ES6
+ JavaScript ES6
 JSON
 Thunder Client para probar las solicitudes
 
 ## Rutas de la API
 
-# Metodo	# Endpoint	            # Descripcion
-GET	      /api/productos	      Consulta todos los productos.
-GET	      /api/usuarios	      Consulta todos los usuarios.
-GET	      /api/ventas	            Consulta todas las ventas.
-POST	      /api/usuarios	      Crea un nuevo usuario.
-POST	      /api/productos	      Crea un nuevo producto.
-PUT	      /api/productos/:id	Actualiza los datos de un producto existente.
-DELETE	/api/usuarios/:id	      Elimina un usuario verificando previamente si posee ventas asociadas.
-GET         /api/usuarios           Consulta todos los usuarios sin mostrar contraseñas.
-GET         /api/usuarios/buscar/:id  Consulta un usuario por ID.
-POST        /api/usuarios           Crea un nuevo usuario validando los datos y el email.
-DELETE      /api/usuarios/:id       Elimina un usuario verificando que no tenga ventas asociadas.
-GET         /api/ventas             Consulta todas las ventas.
-GET          /api/ventas/buscar/:id  Consulta una venta por ID. 
-POST         /api/ventas  Crea una venta validando usuario y productos y calculando el total. 
-PUT         /api/ventas/:id         Actualiza una venta existente. 
-DELETE      /api/ventas/:id         Elimina una venta existente. 
+Método  Endpoint            Descripcion                                                    
+GET     /api/productos            Consulta todos los productos.                                       
+GET     /api/productos/:id       Consulta un producto por ID.                                        
+POST    /api/productos           Crea un nuevo producto.                                             
+PUT     /api/productos/:id        Actualiza los datos de un producto existente.                       
+DELETE  /api/productos/:id        Elimina un producto verificando que no tenga ventas asociadas.     
+GET     /api/usuarios             Consulta todos los usuarios sin mostrar contraseñas.                
+GET     /api/usuarios/buscar/:id  Consulta un usuario por ID.                                         
+POST    /api/usuarios             Crea un nuevo usuario validando los datos y el email.               
+DELETE  /api/usuarios/:id         Elimina un usuario verificando que no tenga ventas asociadas.       
+GET     /api/ventas               Consulta todas las ventas.                                          
+GET     /api/ventas/buscar/:id    Consulta una venta por ID.                                          
+POST    /api/ventas               Crea una venta validando usuario y productos y calculando el total.
+PUT     /api/ventas/:id           Actualiza una venta existente.                                      
+DELETE  /api/ventas/:id           Elimina una venta existente.                                        
 
 ## Persistencia de los datos
-
 Los datos se almacenan en archivos JSON dentro de la carpeta data.
 Las operaciones de creacion, modificacion y eliminacion actualizan directamente los archivos JSON correspondientes.
-Para facilitar la lectura y escritura de los archivos se creó el modulo utils/fileDB.js.
+Para facilitar la lectura y escritura de los archivos se creó el módulo utils/fileDB.js.
 
 ## Integridad de los datos
-Para la solicitud DELETE se tuvo en cuenta la relación entre usuarios y ventas.
+Para las solicitudes DELETE se tuvo en cuenta la relación entre usuarios, productos y ventas.
 Antes de eliminar un usuario, el servidor verifica si existe alguna venta asociada a su id_usuario.
-Si el usuario posee ventas, la eliminación es rechazada para evitar que queden ventas relacionadas con un usuario inexistente.
+De la misma manera, antes de eliminar un producto, se verifica si dicho producto esta asociado a alguna venta.
+Si existe una relacion, la eliminacion es rechazada para evitar que queden ventas relacionadas con un usuario o producto inexistente.
 
-##  Pruebas
+## Pruebas
 Las solicitudes de la API fueron probadas utilizando Thunder Client.
 Se verifico el funcionamiento de los métodos GET, POST, PUT y DELETE, ademas de comprobar que los cambios realizados mediante POST y PUT persisten correctamente en los archivos JSON.
-
+Tambien se verifico la integridad de los datos al intentar eliminar un usuario que posee ventas asociadas.

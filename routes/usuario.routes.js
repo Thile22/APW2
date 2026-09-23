@@ -3,29 +3,26 @@ import { leerArchivo, guardarArchivo } from '../utils/fileDB.js';
 
 const router = express.Router();
 
-const rutaUsuarios = './data/usuarios.json';
-const rutaVentas = './data/ventas.json';
-
 function quitarContraseña(usuario) {
     const { contraseña, ...usuarioSinContraseña } = usuario;
+
     return usuarioSinContraseña;
 }
 
 // GET - Obtener todos los usuarios
 router.get('/', (req, res) => {
-    const usuarios = leerArchivo(rutaUsuarios);
+    const usuarios = leerArchivo('usuarios.json');
 
     const usuariosSinContraseña = usuarios.map(quitarContraseña);
 
     res.json(usuariosSinContraseña);
 });
 
-
 // GET - Obtener un usuario por ID
 router.get('/buscar/:id', (req, res) => {
-    const usuarios = leerArchivo(rutaUsuarios);
+    const usuarios = leerArchivo('usuarios.json');
 
-    const id = Number(req.params.id);
+    const id = parseInt(req.params.id);
 
     const usuario = usuarios.find(usuario => usuario.id === id);
 
@@ -38,22 +35,26 @@ router.get('/buscar/:id', (req, res) => {
     res.json(quitarContraseña(usuario));
 });
 
-
-// POST - Crear un usuario  - chequear que los datos esten completos y que no exista otro usario con elmismo email
+// POST - Crear un usuario
 router.post('/', (req, res) => {
-    const { nombre, apellido, email, contraseña } = req.body;
+    const {
+        nombre,
+        apellido,
+        email,
+        contraseña
+    } = req.body;
 
-    // Verificar que los campos obligatorios estén completos
     if (!nombre || !apellido || !email || !contraseña) {
         return res.status(400).json({
             mensaje: 'Nombre, apellido, email y contraseña son obligatorios'
         });
     }
 
-    const usuarios = leerArchivo(rutaUsuarios);
+    const usuarios = leerArchivo('usuarios.json');
 
-    // Verificar que el email no esté registrado
-    const emailExiste = usuarios.some(usuario => usuario.email === email);
+    const emailExiste = usuarios.some(
+        usuario => usuario.email === email
+    );
 
     if (emailExiste) {
         return res.status(409).json({
@@ -61,7 +62,6 @@ router.post('/', (req, res) => {
         });
     }
 
-    // Generar un nuevo ID
     const nuevoId = usuarios.length > 0
         ? Math.max(...usuarios.map(usuario => usuario.id)) + 1
         : 1;
@@ -77,20 +77,21 @@ router.post('/', (req, res) => {
 
     usuarios.push(nuevoUsuario);
 
-    guardarArchivo(rutaUsuarios, usuarios);
+    guardarArchivo('usuarios.json', usuarios);
 
-    // No devolver la contraseña
     res.status(201).json(quitarContraseña(nuevoUsuario));
 });
 
 // DELETE - Eliminar un usuario
 router.delete('/:id', (req, res) => {
-    const usuarios = leerArchivo(rutaUsuarios);
-    const ventas = leerArchivo(rutaVentas);
+    const usuarios = leerArchivo('usuarios.json');
+    const ventas = leerArchivo('ventas.json');
 
     const id = parseInt(req.params.id);
 
-    const tieneVentas = ventas.some(venta => venta.id_usuario === id);
+    const tieneVentas = ventas.some(
+        venta => venta.id_usuario === id
+    );
 
     if (tieneVentas) {
         return res.status(400).json({
@@ -108,7 +109,7 @@ router.delete('/:id', (req, res) => {
 
     const usuarioEliminado = usuarios.splice(indice, 1)[0];
 
-    guardarArchivo(rutaUsuarios, usuarios);
+    guardarArchivo('usuarios.json', usuarios);
 
     res.json({
         mensaje: 'Usuario eliminado correctamente',
