@@ -5,13 +5,13 @@ let productosCargados = [];
 let carrito = JSON.parse(localStorage.getItem('carrito')) || [];
 let usuarioSesion = null;
 
-// Elementos de la página
+// Elementos de la pagina
 const loginSection = document.getElementById('login-section');
 const tiendaSection = document.getElementById('tienda-section');
 const loginForm = document.getElementById('login-form');
 const loginMensaje = document.getElementById('login-mensaje');
 
-// INICIO DE SESIÓN
+// INICIO DE SESION
 loginForm.addEventListener('submit', async (evento) => {
     evento.preventDefault();
 
@@ -37,7 +37,7 @@ loginForm.addEventListener('submit', async (evento) => {
 
         usuarioSesion = datos.usuario;
 
-        // Guardar la sesión en el navegador
+        // Guardar la sesion en el navegador
         localStorage.setItem(
             'usuarioSesion',
             JSON.stringify(usuarioSesion)
@@ -87,7 +87,7 @@ btnAbrirCarrito.addEventListener('click', () => {
     seccionProductos.hidden = false;
 });
 
-// CERRAR SESIÓN
+// CERRAR SESION
     document.getElementById('cerrar-sesion').addEventListener('click', () => {
     localStorage.removeItem('usuarioSesion');
 
@@ -99,7 +99,7 @@ btnAbrirCarrito.addEventListener('click', () => {
     loginMensaje.textContent = '';
 });
 
-// RECUPERAR LA SESIÓN AL ACTUALIZAR LA PÁGINA
+// RECUPERAR LA SESION AL ACTUALIZAR LA PAGINA
 function recuperarSesion() {
 usuarioSesion = null;
 
@@ -126,7 +126,7 @@ async function cargarProductos() {
     }
 }
 
-// FILTRAR PRODUCTOS POR CATEGORÍA
+// FILTRAR PRODUCTOS POR CATEGORIA
 const filtroCategoria = document.getElementById('filtro-categoria');
 
 filtroCategoria.addEventListener('change', () => {
@@ -336,5 +336,5 @@ try {
     checkoutMensaje.textContent = error.message;
 }
 });
-// INICIAR LA APLICACIÓN
+// INICIAR LA APLICACION
 recuperarSesion();
