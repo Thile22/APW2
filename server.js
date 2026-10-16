@@ -1,13 +1,22 @@
+import dotenv from 'dotenv';
 import express from 'express';
+import cors from 'cors';
+import logger from './middlewares/logger.middleware.js';
+
+dotenv.config();
 
 import productosRoutes from './routes/producto.routes.js';
 import usuariosRoutes from './routes/usuario.routes.js';
 import ventasRoutes from './routes/ventas.routes.js';
 
 const app = express();
-const PORT = process.env.PORT || 3000;
 
+app.use(cors());
 app.use(express.json());
+app.use(logger);
+app.use(express.static('public'));
+
+const PORT = process.env.PORT || 3000;
 
 app.get('/', (req, res) => {
     res.json({

@@ -133,3 +133,43 @@ Si existe una relacion, la eliminacion es rechazada para evitar que queden venta
 Las solicitudes de la API fueron probadas utilizando Thunder Client.
 Se verifico el funcionamiento de los métodos GET, POST, PUT y DELETE, ademas de comprobar que los cambios realizados mediante POST y PUT persisten correctamente en los archivos JSON.
 Tambien se verifico la integridad de los datos al intentar eliminar un usuario que posee ventas asociadas.
+_________________________________________________________________________
+# Tercera entrega - - Frontend de la tienda online
+## Descripcion
+
+Se desarrollo una interfaz web para la tienda online THITEC, integrando el frontend.
+La interfaz permite iniciar sesion, visualizar los productos disponibles, filtrarlos por categoria, administrar un carrito de compras y generar ventas.
+
+## Tecnologias utilizadas
+- HTML5
+- CSS3
+- JavaScript ES6
+- Fetch API para realizar solicitudes HTTP al backend.
+- LocalStorage para conservar los datos del carrito en el navegador.
+
+## Estructura del frontend
+Los archivos correspondientes a la interfaz se encuentran dentro de la carpeta `public/`.
+
+## Funcionalidades implementadas
+Se desarrollo una pantalla de acceso que permite ingresar el correo electronico y la contraseña del usuario.
+Las credenciales se envían al endpoint `POST /api/usuarios/login`. Si la autenticación es correcta, se muestra la tienda.
+También se incorporó un botón para completar automáticamente las credenciales de un usuario de prueba.
+
+### Catalogo de productos
+Los productos se obtienen desde la API mediante una solicitud GET a `/api/productos`.
+Cada producto se presenta mediante una tarjeta que muestra su nombre, categoria, descripcion, precio e imagen. Tambien se incorporo un filtro por categoria para facilitar la busqueda de productos.
+
+### Carrito de compras
+El usuario puede agregar productos al carrito y administrar las cantidades mediante las opciones disponibles en la interfaz.
+El carrito muestra los productos seleccionados y calcula el importe correspondiente.
+Para conservar su contenido entre recargas del navegador, se utiliza `localStorage`.
+
+### Generacion de ventas
+Se implemento un formulario de compra que solicita la dirección de entrega y el metodo de pago.
+Al confirmar la operación, el frontend envia una solicitud POST a `/api/ventas`, incluyendo el usuario, la fecha, la direccion, el método de pago y los productos seleccionados con sus cantidades.
+El backend valida los datos recibidos y calcula el total de la venta utilizando los precios almacenados en `productos.json`.
+Si la operacion finaliza correctamente, la interfaz muestra un mensaje de confirmacion, limpia el carrito y restablece el formulario.
+
+### Cierre de sesion
+Se incorporo una opcion para cerrar la sesion y regresar a la pantalla de inicio de sesion.
+

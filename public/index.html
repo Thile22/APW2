@@ -1,0 +1,195 @@
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title> THITEC Tienda Tecnológica</title>
+    <link rel="stylesheet" href="Css/Style.css">
+</head>
+<body>
+
+    <!-- Pantalla de inicio de sesión -->
+    <section id="login-section" class="login-container">
+    <div class="login-card">
+        <h2>INICIAR SESIÓN</h2>
+        <p class="login-subtitulo">Ingresá a tu cuenta</p>
+
+    <form id="login-form">
+        <label for="login-email">Email</label>
+        <input
+            type="email"
+            id="login-email"
+            placeholder="Ingresar email"
+            required
+        >
+
+        <label for="login-pass">Clave</label>
+        <input
+            type="password"
+            id="login-pass"
+            placeholder="Ingresar clave"
+            required
+        >
+
+        <button type="submit">Ingresar</button>
+    </form>
+
+    <p id="login-mensaje"></p>
+
+    <p class="login-registro">
+        ¿Todavía no estás registrado?
+        <a href="#" id="ir-a-registro">Hacé clic para registrarte</a>
+    </p>
+            <button type="button" id="btn-usuario-prueba">
+                Ingresar como usuario de prueba
+            </button>
+</div>
+
+</section>
+
+    <!-- Tienda: inicialmente oculta -->
+    <main id="tienda-section" hidden>
+
+        <header class="encabezado-tienda">
+            <h1>THITEC</h1>
+            <p>Tienda Tecnológica</p>
+        </header>
+        <div class="usuario-barra">
+        <p id="usuario-identificado"></p>
+        <button type="button" id="cerrar-sesion">Cerrar sesión</button>
+</div>
+
+        <section id="productos">
+    <h2>Nuestros productos</h2>
+
+    <div class="catalogo-layout">
+
+    <!-- Panel lateral -->
+<aside id="panel-lateral">
+
+    <!-- Filtros -->
+    <section id="filtros-productos">
+        <h3>FILTRAR PRODUCTOS</h3>
+
+        <label for="filtro-categoria">Categoría</label>
+        <select id="filtro-categoria">
+            <option value="">Todas las categorías</option>
+            <option value="Periféricos">Periféricos</option>
+            <option value="Monitores">Monitores</option>
+            <option value="Audio">Audio</option>
+            <option value="Computación">Computación</option>
+        </select>
+    </section>
+
+    <!-- Carrito -->
+        <section id="tarjeta-carrito">
+            <h3>TU CARRITO</h3>
+
+    <button type="button" id="btn-abrir-carrito" aria-label="Abrir carrito">
+        <span class="icono-carrito">🛒</span>
+        <span id="cantidad-carrito">0</span>
+    </button>
+</section>
+
+</aside>
+
+<!-- Listado de productos -->
+<div id="lista-productos"></div>
+
+</div>
+
+</section>
+          
+    
+<!-- Pantalla del carrito -->
+<section id="carrito" hidden>
+    <div class="carrito-dashboard">
+
+        <header class="carrito-header">
+            <div>
+                <p class="carrito-etiqueta">THITEC / COMPRAS</p>
+                <h2>Tu carrito</h2>
+                <p>Revisá tus productos antes de confirmar el pedido.</p>
+            </div>
+            <span class="carrito-header-icono">🛒</span>
+        </header>
+
+        <section class="carrito-tabla-panel">
+            <div class="carrito-tabla-scroll">
+                <table class="tabla-carrito">
+                    <thead>
+                        <tr>
+                            <th>PRODUCTO</th>
+                            <th>CANTIDAD</th>
+                            <th>SUBTOTAL</th>
+                            <th>ELIMINAR</th>
+                        </tr>
+                    </thead>
+                    <tbody id="lista-carrito"></tbody>
+                </table>
+            </div>
+
+            <div class="carrito-total">
+                <span>TOTAL</span>
+                <strong id="total-carrito">$0</strong>
+            </div>
+        </section>
+
+        <section id="checkout" class="checkout-panel">
+            <h2>Finalizar compra</h2>
+            <p class="checkout-descripcion">
+                Completá los datos para realizar tu pedido.
+            </p>
+
+            <form id="checkout-form">
+                <div class="checkout-campos">
+                    <div class="checkout-campo">
+                        <label for="direccion-compra">
+                            Dirección de entrega
+                        </label>
+                        <input
+                            type="text"
+                            id="direccion-compra"
+                            placeholder="Ingresá tu dirección"
+                            required
+                        >
+                    </div>
+
+                    <div class="checkout-campo">
+                        <label for="metodo-pago">Método de pago</label>
+                        <select id="metodo-pago" required>
+                            <option value="">Seleccioná un método</option>
+                            <option value="Efectivo">Efectivo</option>
+                            <option value="Transferencia">Transferencia</option>
+                            <option value="Tarjeta">Tarjeta</option>
+                        </select>
+                    </div>
+                </div>
+
+                <p id="checkout-mensaje"></p>
+
+                <div class="checkout-acciones">
+                    <button
+                        type="button"
+                        id="btn-volver-tienda"
+                        class="btn-seguir-comprando"
+                    >
+                        ← Seguir comprando
+                    </button>
+
+                    <button type="submit" class="btn-confirmar-compra">
+                        Confirmar compra
+                    </button>
+                </div>
+            </form>
+        </section>
+
+    </div>
+</section>
+
+    </main>
+
+    <script src="Js/Appi.js"></script>
+</body>
+</html>
