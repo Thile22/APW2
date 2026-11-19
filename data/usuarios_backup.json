@@ -1,0 +1,34 @@
+[
+  {
+    "id": 1,
+    "nombre": "Juan",
+    "apellido": "Pérez",
+    "email": "juan.perez@email.com",
+    "contraseña": "Juan1234",
+    "activo": true
+  },
+  {
+    "id": 2,
+    "nombre": "María",
+    "apellido": "Gómez",
+    "email": "maria.gomez@email.com",
+    "contraseña": "Maria5678",
+    "activo": true
+  },
+  {
+    "id": 3,
+    "nombre": "Lucas",
+    "apellido": "Fernández",
+    "email": "lucas.fernandez@email.com",
+    "contraseña": "Lucas9012",
+    "activo": false
+  },
+  {
+    "id": 4,
+    "nombre": "Sofía",
+    "apellido": "Martínez",
+    "email": "sofia.martinez@email.com",
+    "contraseña": "Sofia3456",
+    "activo": true
+  }
+]

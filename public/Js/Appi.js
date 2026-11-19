@@ -4,12 +4,23 @@ const API_URL = '/api';
 let productosCargados = [];
 let carrito = JSON.parse(localStorage.getItem('carrito')) || [];
 let usuarioSesion = null;
+let tokenSesion = localStorage.getItem('token');
+
 
 // Elementos de la pagina
 const loginSection = document.getElementById('login-section');
 const tiendaSection = document.getElementById('tienda-section');
+const registroSection = document.getElementById('registro-section');
+
 const loginForm = document.getElementById('login-form');
 const loginMensaje = document.getElementById('login-mensaje');
+
+const registroForm = document.getElementById('registro-form');
+const registroMensaje = document.getElementById('registro-mensaje');
+
+const irARegistro = document.getElementById('ir-a-registro');
+const volverLogin = document.getElementById('volver-login');
+
 
 // INICIO DE SESION
 loginForm.addEventListener('submit', async (evento) => {
@@ -37,6 +48,9 @@ loginForm.addEventListener('submit', async (evento) => {
 
         usuarioSesion = datos.usuario;
 
+        tokenSesion = datos.token;
+        localStorage.setItem('token', tokenSesion);
+
         // Guardar la sesion en el navegador
         localStorage.setItem(
             'usuarioSesion',
@@ -59,6 +73,70 @@ loginForm.addEventListener('submit', async (evento) => {
     document.getElementById('login-pass').value = 'Juan1234';
 
     loginForm.requestSubmit();
+});
+
+// MOSTRAR FORMULARIO DE REGISTRO
+irARegistro.addEventListener('click', (e) => {
+    e.preventDefault();
+
+    loginSection.hidden = true;
+    registroSection.hidden = false;
+
+    loginMensaje.textContent = '';
+});
+
+// VOLVER AL INICIO DE SESION
+volverLogin.addEventListener('click', (e) => {
+    e.preventDefault();
+
+    registroSection.hidden = true;
+    loginSection.hidden = false;
+
+    registroMensaje.textContent = '';
+});
+
+ // REGISTRAR NUEVO USUARIO
+registroForm.addEventListener('submit', async (e) => {
+    e.preventDefault();
+
+    const nuevoUsuario = {
+        nombre: document.getElementById('registro-nombre').value.trim(),
+        apellido: document.getElementById('registro-apellido').value.trim(),
+        edad: Number(document.getElementById('registro-edad').value),
+        ocupacion: document.getElementById('registro-ocupacion').value.trim(),
+        ciudad_natal: document.getElementById('registro-ciudad').value.trim(),
+        direccion: document.getElementById('registro-direccion').value.trim(),
+        email: document.getElementById('registro-email').value.trim(),
+        pass: document.getElementById('registro-pass').value
+    };
+
+    try {
+        const respuesta = await fetch(`${API_URL}/usuarios`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(nuevoUsuario)
+        });
+
+        const datos = await respuesta.json();
+
+        if (!respuesta.ok) {
+            throw new Error(datos.mensaje || 'No se pudo registrar el usuario.');
+        }
+
+        registroForm.reset();
+
+        registroSection.hidden = true;
+        loginSection.hidden = false;
+
+        loginMensaje.textContent = '¡Registro exitoso! Ya podés iniciar sesión.';
+        registroMensaje.textContent = '';
+
+    } catch (error) {
+        console.error('Error al registrar usuario:', error);
+        registroMensaje.textContent = error.message;
+    }
 });
 
 // MOSTRAR LA TIENDA
@@ -90,6 +168,8 @@ btnAbrirCarrito.addEventListener('click', () => {
 // CERRAR SESION
     document.getElementById('cerrar-sesion').addEventListener('click', () => {
     localStorage.removeItem('usuarioSesion');
+    localStorage.removeItem('token');
+    tokenSesion = null;
 
     usuarioSesion = null;
 
@@ -100,12 +180,65 @@ btnAbrirCarrito.addEventListener('click', () => {
 });
 
 // RECUPERAR LA SESION AL ACTUALIZAR LA PAGINA
-function recuperarSesion() {
-usuarioSesion = null;
+    async function recuperarSesion() {
+    const tokenGuardado = localStorage.getItem('token');
 
-localStorage.removeItem('usuarioSesion');
-loginSection.hidden = false;
-tiendaSection.hidden = true;
+    if (!tokenGuardado) {
+        usuarioSesion = null;
+        tokenSesion = null;
+
+        localStorage.removeItem('usuarioSesion');
+
+        loginSection.hidden = false;
+        tiendaSection.hidden = true;
+        return;
+    }
+
+    try {
+        const respuesta = await fetch(`${API_URL}/usuarios`, {
+            headers: {
+                'Authorization': `Bearer ${tokenGuardado}`
+            }
+        });
+
+        if (!respuesta.ok) {
+            throw new Error('La sesión venció o no es válida.');
+        }
+
+        const usuarios = await respuesta.json();
+
+        if (!Array.isArray(usuarios) || usuarios.length === 0) {
+            throw new Error('No se pudo recuperar el usuario.');
+        }
+
+        usuarioSesion = usuarios[0];
+        tokenSesion = tokenGuardado;
+
+        localStorage.setItem(
+            'usuarioSesion',
+            JSON.stringify(usuarioSesion)
+        );
+
+        mostrarTienda();
+
+    } catch (error) {
+        console.error('Error al recuperar la sesión:', error);
+
+        usuarioSesion = null;
+        tokenSesion = null;
+
+        // Si el servidor rechazó el token, eliminarlo.
+        if (error.message === 'La sesión venció o no es válida.') {
+            localStorage.removeItem('token');
+            localStorage.removeItem('usuarioSesion');
+        }
+
+        loginSection.hidden = false;
+        tiendaSection.hidden = true;
+
+        loginMensaje.textContent =
+            'No se pudo recuperar la sesión. Iniciá sesión nuevamente.';
+    }
 }
 
 // CARGAR PRODUCTOS DESDE LA API
@@ -302,7 +435,6 @@ const productos = carrito.map(item => ({
 }));
 
 const venta = {
-    id_usuario: usuarioSesion.id,
     fecha: new Date().toISOString(),
     direccion,
     metodo_pago,
@@ -314,14 +446,16 @@ checkoutMensaje.textContent = 'Registrando compra...';
 
 try {
     const respuesta = await fetch(`${API_URL}/ventas`, {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(venta)
-    });
+    method: 'POST',
+    headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${tokenSesion}`
+    },
+    body: JSON.stringify(venta)
+});
 
     const datos = await respuesta.json();
+    
     if (!respuesta.ok) {
         throw new Error(datos.mensaje || 'No se pudo registrar la compra.');
     }

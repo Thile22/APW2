@@ -1,100 +1,120 @@
 
-import { leerArchivo, guardarArchivo } from '../utils/fileDB.js';
+import { Producto } from '../models/producto.js';
+import { Venta } from '../models/ventas.js';
 
 // GET - Obtener todos los productos
-export function obtenerProductos(req, res) {
-    const productos = leerArchivo('productos.json');
-
-    res.json(productos);
+export async function obtenerProductos(req, res) {
+    try {
+        const productos = await Producto.find();
+        res.json(productos);
+    } catch (error) {
+        console.error('Error al obtener productos:', error.message);
+        res.status(500).json({ mensaje: 'Error al obtener productos' });
+    }
 }
 
 // GET - Obtener un producto por ID
-export function obtenerProductoPorId(req, res) {
-    const productos = leerArchivo('productos.json');
-    const id = parseInt(req.params.id);
+export async function obtenerProductoPorId(req, res) {
+    try {
+        const id = parseInt(req.params.id);
+        const producto = await Producto.findOne({ id });
 
-    const producto = productos.find(producto => producto.id === id);
+        if (!producto) {
+            return res.status(404).json({
+                mensaje: 'Producto no encontrado'
+            });
+        }
 
-    if (!producto) {
-        return res.status(404).json({
-            mensaje: 'Producto no encontrado'
-        });
+        res.json(producto);
+    } catch (error) {
+        res.status(500).json({ mensaje: 'Error al obtener producto' });
     }
-
-    res.json(producto);
 }
 
 // POST - Crear un producto
-export function crearProducto(req, res) {
-    const productos = leerArchivo('productos.json');
-    const nuevoProducto = req.body;
+export async function crearProducto(req, res) {
+    try {
+        const nuevoProducto = req.body;
 
-    productos.push(nuevoProducto);
+        const ultimoProducto = await Producto.findOne().sort({ id: -1 });
+        const nuevoId = ultimoProducto ? ultimoProducto.id + 1 : 1;
 
-    guardarArchivo('productos.json', productos);
+        const productoCreado = await Producto.create({
+            ...nuevoProducto,
+            id: nuevoId
+        });
 
-    res.status(201).json(nuevoProducto);
+        res.status(201).json(productoCreado);
+
+    } catch (error) {
+        console.error('Error al crear producto:', error.message);
+        res.status(500).json({ mensaje: 'Error al crear producto' });
+    }
 }
 
 // PUT - Actualizar un producto
-export function actualizarProducto(req, res) {
-    const productos = leerArchivo('productos.json');
-    const id = parseInt(req.params.id);
+export async function actualizarProducto(req, res) {
+    try {
+        const id = parseInt(req.params.id);
 
-    const indice = productos.findIndex(producto => producto.id === id);
+        // No permitimos modificar el ID del producto
+        const { id: idEnviado, ...datosActualizados } = req.body;
 
-    if (indice === -1) {
-        return res.status(404).json({
-            mensaje: 'Producto no encontrado'
-        });
+        const productoActualizado = await Producto.findOneAndUpdate(
+            { id },
+            { $set: datosActualizados },
+            {
+                new: true,
+                runValidators: true
+            }
+        );
+
+        if (!productoActualizado) {
+            return res.status(404).json({
+                mensaje: 'Producto no encontrado'
+            });
+        }
+
+        res.json(productoActualizado);
+
+    } catch (error) {
+        console.error('Error al actualizar producto:', error.message);
+        res.status(500).json({ mensaje: 'Error al actualizar producto' });
     }
-
-    productos[indice] = {
-        ...productos[indice],
-        ...req.body
-    };
-
-    guardarArchivo('productos.json', productos);
-
-    res.json(productos[indice]);
 }
 
 // DELETE - Eliminar un producto verificando que no tenga ventas asociadas
-export function eliminarProducto(req, res) {
-    const productos = leerArchivo('productos.json');
-    const ventas = leerArchivo('ventas.json');
+export async function eliminarProducto(req, res) {
+    try {
+        const id = parseInt(req.params.id);
 
-    const id = parseInt(req.params.id);
+        const producto = await Producto.findOne({ id });
 
-    const indice = productos.findIndex(producto => producto.id === id);
+        if (!producto) {
+            return res.status(404).json({
+                mensaje: 'Producto no encontrado'
+            });
+        }
 
-    if (indice === -1) {
-        return res.status(404).json({
-            mensaje: 'Producto no encontrado'
+        const productoEnVenta = await Venta.exists({
+            'productos.id': id
         });
-    }
 
-    const productoEnVenta = ventas.some(venta =>
-        Array.isArray(venta.productos) &&
-        venta.productos.some(item =>
-            typeof item === 'number'
-                ? item === id
-                : Number(item.id) === id
-        )
-    );
+        if (productoEnVenta) {
+            return res.status(400).json({
+                mensaje: 'No se puede eliminar el producto porque está asociado a una venta'
+            });
+        }
 
-    if (productoEnVenta) {
-        return res.status(400).json({
-            mensaje: 'No se puede eliminar el producto porque está asociado a una venta'
+        await Producto.deleteOne({ id });
+
+        res.json({
+            mensaje: 'Producto eliminado correctamente',
+            producto
         });
+
+    } catch (error) {
+        console.error('Error al eliminar producto:', error.message);
+        res.status(500).json({ mensaje: 'Error al eliminar producto' });
     }
-
-    const productoEliminado = productos.splice(indice, 1)[0];
-
-    guardarArchivo('productos.json', productos);
-
-    res.json({
-        mensaje: 'Producto eliminado correctamente',
-        producto: productoEliminado
-    });
 }

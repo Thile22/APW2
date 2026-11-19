@@ -4,12 +4,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title> THITEC Tienda Tecnológica</title>
+    <title> THITEC Tienda Tecnologica</title>
     <link rel="stylesheet" href="Css/Style.css">
 </head>
 <body>
 
-    <!-- Pantalla de inicio de sesión -->
+    <!-- Pantalla de inicio de sesion -->
     <section id="login-section" class="login-container">
     <div class="login-card">
         <h2>INICIAR SESIÓN</h2>
@@ -46,6 +46,50 @@
             </button>
 </div>
 
+</section>
+
+<!-- Pantalla de registro de usuario: inicialmente oculta -->
+<section id="registro-section" class="login-container" hidden>
+    <div class="login-card">
+        <h2>CREAR CUENTA</h2>
+        <p class="login-subtitulo">Registrate en THITEC</p>
+
+        <form id="registro-form">
+
+            <label for="registro-nombre">Nombre</label>
+            <input type="text" id="registro-nombre" required>
+
+            <label for="registro-apellido">Apellido</label>
+            <input type="text" id="registro-apellido" required>
+
+            <label for="registro-edad">Edad</label>
+            <input type="number" id="registro-edad" min="1" required>
+
+            <label for="registro-ocupacion">Ocupación</label>
+            <input type="text" id="registro-ocupacion" required>
+
+            <label for="registro-ciudad">Ciudad natal</label>
+            <input type="text" id="registro-ciudad" required>
+
+            <label for="registro-direccion">Dirección</label>
+            <input type="text" id="registro-direccion" required>
+
+            <label for="registro-email">Email</label>
+            <input type="email" id="registro-email" required>
+
+            <label for="registro-pass">Contraseña</label>
+            <input type="password" id="registro-pass" required>
+
+            <button type="submit">Registrarse</button>
+        </form>
+
+        <p id="registro-mensaje"></p>
+
+        <p class="login-registro">
+            ¿Ya tenés una cuenta?
+            <a href="#" id="volver-login">Iniciá sesión</a>
+        </p>
+    </div>
 </section>
 
     <!-- Tienda: inicialmente oculta -->

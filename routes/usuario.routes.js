@@ -1,5 +1,5 @@
-
 import express from 'express';
+import { verificarToken } from '../middlewares/verificarToken.js';
 
 import {
     obtenerUsuarios,
@@ -11,19 +11,19 @@ import {
 
 const router = express.Router();
 
-// GET - Obtener todos los usuarios
-router.get('/', obtenerUsuarios);
+// GET - Obtener los datos del usuario autenticado
+router.get('/', verificarToken, obtenerUsuarios);
 
 // GET - Obtener un usuario por ID
-router.get('/buscar/:id', obtenerUsuarioPorId);
+router.get('/buscar/:id', verificarToken, obtenerUsuarioPorId);
 
-// POST - Crear un usuario
+// POST - Crear un usuario (registro público)
 router.post('/', crearUsuario);
 
-// POST - Iniciar sesion
+// POST - Iniciar sesión (público)
 router.post('/login', iniciarSesion);
 
-// DELETE - Eliminar un usuario
-router.delete('/:id', eliminarUsuario);
+// DELETE - Eliminar la propia cuenta
+router.delete('/:id', verificarToken, eliminarUsuario);
 
 export default router;

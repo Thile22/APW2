@@ -1,4 +1,6 @@
+
 import express from 'express';
+import { verificarToken } from '../middlewares/verificarToken.js';
 
 import {
     obtenerVentas,
@@ -11,18 +13,18 @@ import {
 const router = express.Router();
 
 // GET - Obtener todas las ventas
-router.get('/', obtenerVentas);
+router.get('/', verificarToken, obtenerVentas);
 
 // GET - Obtener una venta por ID
-router.get('/buscar/:id', obtenerVentaPorId);
+router.get('/buscar/:id', verificarToken, obtenerVentaPorId);
 
 // POST - Crear una venta
-router.post('/', crearVenta);
+router.post('/', verificarToken, crearVenta);
 
 // PUT - Actualizar una venta
-router.put('/:id', actualizarVenta);
+router.put('/:id', verificarToken, actualizarVenta);
 
 // DELETE - Eliminar una venta
-router.delete('/:id', eliminarVenta);
+router.delete('/:id', verificarToken, eliminarVenta);
 
 export default router;

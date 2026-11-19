@@ -1,179 +1,207 @@
 # Trabajo Practico - Aplicaciones Web 2
+# THITEC - Tienda Online de Productos Tecnologicos
 
 ## Contexto del negocio
 
-Se realizo la estructura de datos de una tienda online dedicada a la comercializacion de productos tecnologicos.
+Se desarrollo una aplicacion web para una tienda online dedicada a la comercializacion de productos tecnologicos.
 
+El sistema permite gestionar usuarios, consultar productos, administrar un carrito de compras y generar ventas mediante una API REST.
+---
+# Primera entrega - Estructura de datos
+## Estructuras iniciales
+Se diseñaron tres estructuras de datos para representar la informacion del negocio:
 
-## Estructuras
+## usuarios.json
+Contiene informacion de los usuarios registrados:
+- ID del usuario.
+- Nombre y apellido.
+- Email.
+- Contraseña.
+- Estado de actividad.
 
-### usuarios.json
+## productos.json
+Contiene informacion de los productos:
+- ID del producto.
+- Nombre.
+- Descripcion.
+- Precio.
+- Imagen.
+- Stock.
+- Disponibilidad.
 
-Contiene la informacion de los usuarios registrados en la tienda.
+## ventas.json
+Contiene informacion de las ventas:
+- ID de la venta.
+- ID del usuario que realizo la compra.
+- Fecha.
+- Total.
+- Direccion de entrega.
+- Productos adquiridos.
+- Metodo de pago.
+- Estado del pago.
 
-Los principales datos son:
+## Relaciones entre las estructuras
+Las estructuras se relacionan mediante identificadores.
 
-- ID del usuario
-- Nombre
-- Apellido
-- Email
-- Contraseña
-- Estado de actividad
-
-### productos.json
-
-Contiene la informacion de los productos disponibles en la tienda.
-
-Los principales datos son:
-
-- ID del producto
-- Nombre
-- Descripcion
-- Precio
-- Imagen
-- Stock
-- Disponibilidad
-
-### ventas.json
-
-Contiene la informacion de las ventas realizadas.
-
-Los principales datos son:
-
-- ID de la venta
-- ID del usuario que realizó la compra
-- Fecha
-- Total
-- Dirección de entrega
-- Productos adquiridos
-- Método de pago
-- Estado del pago
-
-## Relacion entre las estructuras
-
-Las tres estructuras se encuentran relacionadas mediante identificadores.
-
-Cada venta posee un `id_usuario`, que permite identificar al usuario que
-realizo la compra.
-
-Ademas, cada venta contiene un array `productos` con los IDs de los
-productos adquiridos.
-
-La relación se puede representar de la siguiente manera:
-
-usuarios.json
-      |
-      | id_usuario
-      ↓
-ventas.json
-      |
-      | productos[]
-      ↓
-productos.json
-
-## Tipos de datos
-
-Las estructuras utilizan diferentes tipos de datos:
-
-- **Numericos:** IDs, precios, stock y totales.
-- **Cadenas de texto:** nombres, apellidos, emails, descripciones,
-  direcciones y metodos de pago.
-- **Booleanos:** estado de los usuarios, disponibilidad de productos
-  y estado de pago de las ventas.
-
-_________________________________________________________________________
+Cada venta contiene un `id_usuario` que identifica al usuario que realizo la compra. Ademas, contiene un array `productos` con los identificadores y cantidades de los productos adquiridos.
+---
 # Segunda entrega - API con Express.js
+## Descripcion
 
-En esta segunda etapa se desarrollo un servidor utilizando Node.js y Express.js para gestionar las estructuras de datos creadas anteriormente.
-Se implementaron rutas utilizando los metodos HTTP GET, POST, PUT y DELETE, manteniendo los datos almacenados en archivos JSON.
+Se desarrollo un servidor utilizando Node.js y Express.js para gestionar usuarios, productos y ventas mediante una API REST.
 
-## Servidor
-La dirección principal es:
-http://localhost:3000
-Las rutas de la API utilizan el prefijo /api.
+Inicialmente, la persistencia se realizo mediante archivos JSON.
 
 ## Tecnologias utilizadas
+- Node.js.
+- Express.js.
+- JavaScript ES6.
+- JSON.
+- Thunder Client para probar solicitudes HTTP.
 
- Node.js
-Express.js
- JavaScript ES6
-JSON
-Thunder Client para probar las solicitudes
+## Servidor
+Direccion principal:
+
+`http://localhost:3000`
+
+Las rutas de la API utilizan el prefijo `/api`.
 
 ## Rutas de la API
 
-Método  Endpoint            Descripcion                                                    
-GET     /api/productos            Consulta todos los productos.                                       
-GET     /api/productos/:id       Consulta un producto por ID.                                        
-POST    /api/productos           Crea un nuevo producto.                                             
-PUT     /api/productos/:id        Actualiza los datos de un producto existente.                       
-DELETE  /api/productos/:id        Elimina un producto verificando que no tenga ventas asociadas.     
-GET     /api/usuarios             Consulta todos los usuarios sin mostrar contraseñas.                
-GET     /api/usuarios/buscar/:id  Consulta un usuario por ID.                                         
-POST    /api/usuarios             Crea un nuevo usuario validando los datos y el email.               
-DELETE  /api/usuarios/:id         Elimina un usuario verificando que no tenga ventas asociadas.       
-GET     /api/ventas               Consulta todas las ventas.                                          
-GET     /api/ventas/buscar/:id    Consulta una venta por ID.                                          
-POST    /api/ventas               Crea una venta validando usuario y productos y calculando el total.
-PUT     /api/ventas/:id           Actualiza una venta existente.                                      
-DELETE  /api/ventas/:id           Elimina una venta existente.                                        
-
-## Persistencia de los datos
-Los datos se almacenan en archivos JSON dentro de la carpeta data.
-Las operaciones de creacion, modificacion y eliminacion actualizan directamente los archivos JSON correspondientes.
-Para facilitar la lectura y escritura de los archivos se creó el módulo utils/fileDB.js.
+| Metodo | Endpoint | Descripción |
+| GET | `/api/productos` | Consulta todos los productos. |
+| GET | `/api/productos/buscar/:id` | Consulta un producto por ID. |
+| POST | `/api/productos` | Crea un producto. |
+| PUT | `/api/productos/:id` | Actualiza un producto. |
+| DELETE | `/api/productos/:id` | Elimina un producto si no esta asociado a ventas. |
+| GET | `/api/usuarios` | Consulta los datos del usuario autenticado. |
+| GET | `/api/usuarios/buscar/:id` | Consulta un usuario por ID propio. |
+| POST | `/api/usuarios` | Registra un nuevo usuario. |
+| POST | `/api/usuarios/login` | Inicia sesion. |
+| DELETE | `/api/usuarios/:id` | Elimina la propia cuenta si no tiene ventas asociadas. |
+| GET | `/api/ventas` | Consulta las ventas del usuario autenticado. |
+| GET | `/api/ventas/buscar/:id` | Consulta una venta propia por ID. |
+| POST | `/api/ventas` | Registra una nueva venta. |
+| PUT | `/api/ventas/:id` | Actualiza una venta propia. |
+| DELETE | `/api/ventas/:id` | Elimina una venta propia. |
 
 ## Integridad de los datos
-Para las solicitudes DELETE se tuvo en cuenta la relación entre usuarios, productos y ventas.
-Antes de eliminar un usuario, el servidor verifica si existe alguna venta asociada a su id_usuario.
-De la misma manera, antes de eliminar un producto, se verifica si dicho producto esta asociado a alguna venta.
-Si existe una relacion, la eliminacion es rechazada para evitar que queden ventas relacionadas con un usuario o producto inexistente.
+Se implementaron controles para preservar las relaciones entre usuarios, productos y ventas.
+Antes de eliminar un usuario, el servidor verifica si tiene ventas asociadas y antes de eliminar un producto, se comprueba que no este asociado a ninguna venta.
+--
+# Tercera entrega - Frontend de la tienda online
 
-## Pruebas
-Las solicitudes de la API fueron probadas utilizando Thunder Client.
-Se verifico el funcionamiento de los métodos GET, POST, PUT y DELETE, ademas de comprobar que los cambios realizados mediante POST y PUT persisten correctamente en los archivos JSON.
-Tambien se verifico la integridad de los datos al intentar eliminar un usuario que posee ventas asociadas.
-_________________________________________________________________________
-# Tercera entrega - - Frontend de la tienda online
 ## Descripcion
-
-Se desarrollo una interfaz web para la tienda online THITEC, integrando el frontend.
-La interfaz permite iniciar sesion, visualizar los productos disponibles, filtrarlos por categoria, administrar un carrito de compras y generar ventas.
+Se desarrollo una interfaz web para la tienda online THITEC, integrada con el backend mediante solicitudes HTTP.
 
 ## Tecnologias utilizadas
-- HTML5
-- CSS3
-- JavaScript ES6
-- Fetch API para realizar solicitudes HTTP al backend.
-- LocalStorage para conservar los datos del carrito en el navegador.
+- HTML5.
+- CSS3.
+- JavaScript ES6.
+- Fetch API.
+- LocalStorage.
 
 ## Estructura del frontend
-Los archivos correspondientes a la interfaz se encuentran dentro de la carpeta `public/`.
+Los archivos de la interfaz se encuentran dentro de la carpeta `public/`.
 
 ## Funcionalidades implementadas
-Se desarrollo una pantalla de acceso que permite ingresar el correo electronico y la contraseña del usuario.
-Las credenciales se envían al endpoint `POST /api/usuarios/login`. Si la autenticación es correcta, se muestra la tienda.
-También se incorporó un botón para completar automáticamente las credenciales de un usuario de prueba.
+
+### Inicio de sesion
+Se incorporo una pantalla de acceso que permite ingresar el correo electronico y la contraseña.
+Las credenciales se envían al endpoint `POST /api/usuarios/login`.
+Tambien se incorporo un boton para completar automaticamente las credenciales de un usuario de prueba.
 
 ### Catalogo de productos
-Los productos se obtienen desde la API mediante una solicitud GET a `/api/productos`.
-Cada producto se presenta mediante una tarjeta que muestra su nombre, categoria, descripcion, precio e imagen. Tambien se incorporo un filtro por categoria para facilitar la busqueda de productos.
+Los productos se obtienen desde la API mediante solicitudes GET.
+Cada producto se presenta mediante una tarjeta que muestra su nombre, categoria, descripciin, precio e imagen.
+Tambien se implemento un filtro por categoría.
 
 ### Carrito de compras
-El usuario puede agregar productos al carrito y administrar las cantidades mediante las opciones disponibles en la interfaz.
+El usuario puede agregar productos al carrito y modificar sus cantidades.
 El carrito muestra los productos seleccionados y calcula el importe correspondiente.
-Para conservar su contenido entre recargas del navegador, se utiliza `localStorage`.
+Se utiliza LocalStorage para conservar el contenido del carrito entre recargas del navegador.
 
 ### Generacion de ventas
-Se implemento un formulario de compra que solicita la dirección de entrega y el metodo de pago.
-Al confirmar la operación, el frontend envia una solicitud POST a `/api/ventas`, incluyendo el usuario, la fecha, la direccion, el método de pago y los productos seleccionados con sus cantidades.
-El backend valida los datos recibidos y calcula el total de la venta utilizando los precios almacenados en `productos.json`.
-Si la operacion finaliza correctamente, la interfaz muestra un mensaje de confirmacion, limpia el carrito y restablece el formulario.
+Se implemento un formulario que solicita la direccion de entrega y el metodo de pago.
+Al confirmar la compra, el frontend envia una solicitud POST a `/api/ventas`, incluyendo los productos seleccionados y sus cantidades.
+El backend identifica al usuario mediante el token JWT y calcula el total utilizando los precios almacenados en la base de datos.
+Si la operación finaliza correctamente, la interfaz muestra un mensaje de confirmación y limpia el carrito.
 
-### Cierre de sesion
-Se incorporo una opcion para cerrar la sesion y regresar a la pantalla de inicio de sesion.
+### Cierre de sesión
+Se incorporó una opción para cerrar la sesión y regresar a la pantalla de inicio de sesión.
+---
+# Cuarta entrega - Seguridad y persistencia con MongoDB
 
+## Descripción
+En esta etapa se modifico la persistencia del sistema para utilizar MongoDB y se incorporaron mecanismos de seguridad mediante bcrypt y JSON Web Tokens (JWT).
+El objetivo fue mejorar la proteccion de las contraseñas, controlar el acceso a las operaciones de la API y centralizar la persistencia de la informacion.
 
-## GITHUB
-GITHUB https://github.com/Thile22/APW2.git
+## Tecnologías utilizadas
+- Node.js.
+- Express.js.
+- MongoDB.
+- Mongoose.
+- bcrypt.
+- JSON Web Token (JWT).
+- dotenv.
+- JavaScript ES6.
 
+## Migracion a MongoDB
+Se reemplazo la persistencia principal mediante archivos JSON por una base de datos MongoDB.
+Se utiliza Mongoose para definir los modelos y realizar las operaciones.
+La base de datos utilizada es `thitec` y contiene informacion de:
+- Usuarios.
+- Productos.
+- Ventas.
+
+La conexion se configura mediante el archivo `config/database.js` y las variables de entorno definidas en `.env`.
+Los archivos JSON originales y sus respaldos se conservaron como referencia de los datos iniciales.
+
+## Proteccion de contraseñas con bcrypt
+
+Se implementó bcrypt para proteger las contraseñas de los usuarios.
+Al registrarse, la contraseña se transforma en un hash antes de almacenarse en MongoDB.
+Durante el inicio de sesion, se utiliza bcrypt para comparar la contraseña ingresada con el hash almacenado.
+Las respuestas de la API no exponen las contraseñas.
+
+## Autenticacion mediante JWT
+Se incorporo JSON Web Token para autenticar a los usuarios.
+Cuando el inicio de sesion es correcto, el servidor genera un token JWT con una duracion de 2 horas.
+El token permite identificar al usuario autenticado y acceder a las rutas que requieren autenticacion.
+Se implemento el middleware `verificarToken.js`, encargado de comprobar la validez del token recibido en las solicitudes.
+
+El token se envia mediante el encabezado HTTP:
+`Authorization: Bearer TOKEN`
+
+## Proteccion de rutas
+
+Se establecieron las siguientes condiciones de acceso:
+- Las operaciones de creacion, modificacion y eliminacion de productos requieren autenticacion.
+- El registro y el inicio de sesion permanecen publicos.
+- Las consultas y la eliminacion de usuarios requieren autenticacion.
+- Las operaciones de ventas requieren autenticacion.
+- Cada usuario solamente puede consultar y administrar sus propias ventas.
+- Cada usuario solamente puede consultar o eliminar su propia cuenta.
+
+## Validaciones e integridad
+
+El backend verifica los productos y las cantidades antes de registrar una venta.
+El total de la compra se calcula utilizando los precios almacenados en MongoDB, evitando depender de los importes enviados por el frontend.
+Tambien se verifica que los usuarios y productos no puedan eliminarse cuando existen ventas asociadas.
+
+## Pruebas realizadas
+
+Se utilizo Thunder Client para probar las solicitudes HTTP de la API.
+Se verificó:
+- El inicio de sesión y la generación del token JWT.
+- El acceso a rutas protegidas con un token valido.
+- El rechazo de solicitudes sin token.
+- El rechazo de tokens invalidos o vencidos.
+- La restriccion de acceso a los datos de otros usuarios.
+- La creacion de ventas y su almacenamiento en MongoDB.
+---
+
+# Repositorio GitHub
+
+Repositorio del proyecto:
+https://github.com/Thile22/APW2.git

@@ -2,6 +2,7 @@ import dotenv from 'dotenv';
 import express from 'express';
 import cors from 'cors';
 import logger from './middlewares/logger.middleware.js';
+import { conectarDB } from './config/database.js';
 
 dotenv.config();
 
@@ -35,6 +36,13 @@ app.use((req, res) => {
     });
 });
 
-app.listen(PORT, () => {
-    console.log(`Servidor corriendo en http://localhost:${PORT}`);
-});
+conectarDB()
+    .then(() => {
+        app.listen(PORT, () => {
+            console.log(`Servidor corriendo en http://localhost:${PORT}`);
+        });
+    })
+    .catch((error) => {
+        console.error('No se pudo iniciar el servidor:', error.message);
+        process.exit(1);
+    });
