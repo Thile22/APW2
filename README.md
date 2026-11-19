@@ -205,3 +205,10 @@ Se verificó:
 
 Repositorio del proyecto:
 https://github.com/Thile22/APW2.git
+
+## Video de presentación
+
+En el siguiente enlace se encuentra la demostración
+del funcionamiento de THITEC:
+
+https://drive.google.com/drive/folders/16XOkCLrMM1WADI_W1EP8un-usjRPmaGg?usp=sharing
